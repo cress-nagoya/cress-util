@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+# Author: Satoki Tsujino
 # [USAGE]: $ ruby conv_grads2nc.rb
 # To convert CReSS united binary files to NetCDF time series file
 # Copyright: Satoki Tsujino (satoki@gfd-dennou.org)

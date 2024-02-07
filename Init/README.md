@@ -1,7 +1,7 @@
 # Init
 Templates to make initial and boundary conditions for various model simulations
 
-## TC-Bogus
+## Ideal_TC
 To make initial and boundary conditions for numerical experiments of idealized tropical cyclones. 
 
 The templates are used in an external program `TC_Bogus` [(Zenodo Link)](https://doi.org/10.5281/zenodo.4558393) developed by Satoki Tsujino. 

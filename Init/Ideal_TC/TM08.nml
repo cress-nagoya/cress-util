@@ -1,0 +1,48 @@
+&input
+ xmin = -1050.0e3  ! West of the domain [m]
+ ymin = -1050.0e3  ! South of the domain [m]
+ zmin = 0.0  ! Bottom of the domain [m]
+ xmax = 1050.0e3  ! East of the domain [m]
+ ymax = 1050.0e3  ! North of the domain [m]
+ zmax = 23500.0  ! Top of the domain [m]
+ nx = 1051  ! Grid number in X-direction
+ ny = 1051  ! Grid number in Y-direction
+ nz = 30   ! Grid number in Z-direction
+ nr = 1051  ! Grid number in radial direction
+/
+
+&param
+ rc = 250.e3  ! The outer radius in the vortex parameters [m]
+ Bmax = 4.0e-7  ! Maximum of the normalized buoyancy [1]
+ zlim = 8.0e3  ! The zero-wind level (i.e., the top of the vortex) [m]
+ cent_lat = 15.0  ! The centered latitude on the f-plane [degree]
+ qvrh = 70.0e3  ! Radius of maximum "qvmax" from the storm center [m]
+ qvzh = 3.0e3  ! Height of maximum "qvmax" from the surface [m]
+ qvmax = 1.3e-3  ! Maximum value of the water vapor mixing ratio at the storm center
+ ubar = 5.0e0  ! Mean flow in X-direction [m/s]
+/
+
+&inifo
+ ptmax = 2.0    ! Maximum value of the potential temperature perturbation
+ ptxc = 75.0e3  ! The central location of the potential temperature perturbation in X-coordinate [m]
+ ptyc = 0.0     ! The central location of the potential temperature perturbation in Y-coordinate [m]
+ ptzc = 2.0e3   ! The central location of the potential temperature perturbation in Z-coordinate [m]
+ ptxr = 5.0e3   ! The quarter wavelength of the perturbation in X-direction [m]
+ ptyr = 5.0e3   ! The quarter wavelength of the perturbation in Y-direction [m]
+ ptzr = 2.0e3   ! The quarter wavelength of the perturbation in Z-direction [m]
+/
+
+&fread
+ sounding_name = 'J58.sounding.txt '  ! Environmental sounding profile
+ skip_num = 2  ! Skipping lines from the first line in "sounding_name"
+ read_colum = '2134'  ! Column order of each variable in "sounding_name"
+                                  ! 1 = Height
+                                  ! 2 = Pressure
+                                  ! 3 = Temperature
+                                  ! 4 = Moisture
+ unit_flag(1) = 'm'  ! Unit of "Height" : m or km
+ unit_flag(2) = 'mb'  ! Unit of "Pressure" : hPa or mb or Pa
+ unit_flag(3) = 'C'  ! Unit of "Temperature" : K or C
+ unit_flag(4) = 'gkg'  ! Unit of "Moisture" : % or kgkg or gkg or gg
+ output_name = 'TM08.sounding_299_C_RMW250.bin'  ! Output file name
+/

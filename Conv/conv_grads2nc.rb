@@ -13,7 +13,7 @@ include NumRu
 include NMath
 
 ######### Set your environment #########
-conf = "form_toyohashi-1.user.conf"  # CReSS configuration file
+conf = "user.conf.Peng"  # CReSS configuration file
 undefv = -1.0e35  # undefined value in CReSS (fixed number)
 ########################################
 
@@ -125,8 +125,17 @@ for i in 0..fctl.size-1
             zval[j-1] = tmpc[3].to_f + tmpc[4].to_f * (j - 1)
          end
       elsif tmpc[2] == "levels" then
-         for j in 1..nzctl
-            zval[j-1] = tmpc[j+2].to_f
+         cz_tmp = fctl[i] + " "
+         for j in i+1..fctl.size-1
+            if fctl[j].split[0] != 'tdef' then  # zdef 行以降で先頭に tdef が現れるまで cz_tmp に追記.
+               cz_tmp = cz_tmp + fctl[j] + " "
+            else
+               break
+            end
+         end
+         rz_tmp = cz_tmp.split  # スペースで分けられた各 level を Array 化
+         for j in 3..rz_tmp.size-1  # 先頭 3 単語 (zdef nz levels) スキップ
+            zval[j-3] = rz_tmp[j].to_f
          end
       end
    end

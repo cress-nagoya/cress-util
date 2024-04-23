@@ -1,5 +1,5 @@
 # Author: Satoki Tsujino (satoki@gfd-dennou.org)
-# Date: 2024/04/17
+# Date: 2024/04/17, 2024/04/23
 
 using NCDatasets
 using Dates
@@ -71,9 +71,11 @@ for i in 1:size(fcont)[1]
                 if occursin("dy",fline[5]) == true
                     global dt = parse(Int,replace(fline[5],"dy"=>"")) * 86400
                 elseif occursin("hr",fline[5]) == true
-                    global dt = parse(Int,replace(fline[5],"dy"=>"")) * 3600
+                    global dt = parse(Int,replace(fline[5],"hr"=>"")) * 3600
                 elseif occursin("mn",fline[5]) == true
-                    global dt = parse(Int,replace(fline[5],"dy"=>"")) * 60
+                    global dt = parse(Int,replace(fline[5],"mn"=>"")) * 60
+                elseif occursin("sc",fline[5]) == true
+                    global dt = parse(Int,replace(fline[5],"sc"=>""))
                 end
                 global dt_inc = dt
             end
@@ -93,7 +95,13 @@ for i in 1:size(fcont)[1]
                 tmptime = replace(tmptime,"OCT" => "10")
                 tmptime = replace(tmptime,"NOV" => "11")
                 tmptime = replace(tmptime,"DEC" => "12")
+                tmp_utc = split(split(tmptime,"Z")[1],":")
                 global curtime = tmptime[end-3:end] * '-' * tmptime[end-5:end-4] * '-' * tmptime[end-7:end-6] * ' ' * split(tmptime,"Z")[1]
+                if size(tmp_utc)[1] == 1  # HHZ
+                    global curtime = curtime * ":00:00"
+                elseif size(tmp_utc)[1] == 2  # HH:NNZ
+                    global curtime = curtime * ":00"
+                end
             end
         elseif fline[1] == "vars"
             global nv = parse(Int,fline[2])
@@ -164,8 +172,18 @@ for i in 1:nt
         tmptime = (i - 1) * dt_inc
         ifile = replace(file_template,"%y4" => lpad(tmptime,4,"0"))
     else
-        tmptime = idatetime + (dt_inc * (i - 1))
-        ifile = replace(replace(replace(replace(replace(file_template,"%y4" => lpad(tmptime.year,4,"0")),"%m2" => lpad(tmptime.month,2,"0"),"%d2" => lpad(tmptime.day,2,"0"),"%h2" => lpad(tmptime.hour,2,"0"),"%n2" => lpad(tmptime.minute,2,"0")))))
+        tmptime = idatetime + Second(dt_inc * (i - 1))
+        ifile = replace(
+                  replace(
+                    replace(
+                      replace(
+                        replace(
+                          replace(file_template,"%y4" => lpad(string(year(tmptime)),4,"0")),
+                                                "%m2" => lpad(string(month(tmptime)),2,"0")),
+                                                "%d2" => lpad(string(day(tmptime)),2,"0")),
+                                                "%h2" => lpad(string(hour(tmptime)),2,"0")),
+                                                "%n2" => lpad(string(minute(tmptime)),2,"0")),
+                                                "%s2" => lpad(string(second(tmptime)),2,"0"))
     end
     println(ifile)
     ofile = ifile * ".nc"
@@ -212,4 +230,3 @@ for i in 1:nt
     close(ds)
     println("Output: ", ofile)
 end
-

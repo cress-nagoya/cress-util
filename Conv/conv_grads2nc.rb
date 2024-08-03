@@ -31,6 +31,7 @@ dmpmon = fconf_nospace.split("\ndmpmon=")[1].split("\n")[0].split("!")[0].to_i
 nx = fconf_nospace.split("\nxdim=")[1].split("\n")[0].split("!")[0].to_i - 3
 ny = fconf_nospace.split("\nydim=")[1].split("\n")[0].split("!")[0].to_i - 3
 nz = fconf_nospace.split("\nzdim=")[1].split("\n")[0].split("!")[0].to_i - 3
+nz_und = fconf_nospace.split("\nlevund=")[1].split("\n")[0].split("!")[0].to_i - 3
 ts = fconf_nospace.split("\nstime=")[1].split("\n")[0].split("!")[0].to_i
 te = fconf_nospace.split("\netime=")[1].split("\n")[0].split("!")[0].to_i
 start_time = fconf_nospace.split("\nsfcast=")[1].split("\n")[0].split("!")[0].gsub("'","")
@@ -58,6 +59,7 @@ puts "dmpmon = #{dmpmon}"
 puts "nx = #{nx}"
 puts "ny = #{ny}"
 puts "nz = #{nz}"
+puts "nz_und = #{nz_und}"
 puts "ts = #{ts}"
 puts "te = #{te}"
 puts "start_time = #{start_time[0..9]} #{start_time[10..-1]}"
@@ -145,6 +147,7 @@ for i in 0..fctl.size-1
       break
    end
 end
+zval_und = NArray.float(nz_und).indgen!
 
 dmpvname = Array.new(vnumdmp)
 dmplname = Array.new(vnumdmp)
@@ -193,6 +196,9 @@ else
 end
 
 z.replace_val(zval)
+
+zund = VArray.new( NArray.float(nz_und), {"long_name"=>"Grid level under ground", "units"=>"1"}, "zund" )
+zund.replace_val(zval_und)
 
 stime = "#{start_time[0..3]}-#{start_time[5..6]}-#{start_time[8..9]} #{start_time[10..11]}:#{start_time[13..14]}:00"
 t2d = VArray.new( NArray.float(nt2d), {"long_name"=>"seconds since #{stime}", "units"=>"s"}, "t" )
@@ -253,18 +259,22 @@ ofile3d = NetCDF.create(ofilename3d)
 ofile3d.def_dim("x",nx)
 ofile3d.def_dim("y",ny)
 ofile3d.def_dim("z",nz)
+ofile3d.def_dim("zund",nz_und)
 ofile3d.def_dim("time",0)
 x_nc = ofile3d.def_var("x","float",["x"])
 y_nc = ofile3d.def_var("y","float",["y"])
 z_nc = ofile3d.def_var("z","float",["z"])
+zund_nc = ofile3d.def_var("zund","float",["zund"])
 t3d_nc = ofile3d.def_var("time","float",["time"])
 x_nc.put_att("long_name",x.get_att("long_name"))
 y_nc.put_att("long_name",y.get_att("long_name"))
 z_nc.put_att("long_name",z.get_att("long_name"))
+zund_nc.put_att("long_name",zund.get_att("long_name"))
 t3d_nc.put_att("long_name",t3d.get_att("long_name"))
 x_nc.put_att("units",x.get_att("units"))
 y_nc.put_att("units",y.get_att("units"))
 z_nc.put_att("units",z.get_att("units"))
+zund_nc.put_att("units",zund.get_att("units"))
 t3d_nc.put_att("units",t3d.get_att("units"))
 vgeo_nc = Array.new(vnumdmp)
 v3d_nc = Array.new(vnumdmp)
@@ -279,7 +289,11 @@ for k in 0..vnumdmp-1  # dmp data
    if dmpnz[k] == 1 then
       v3d_nc[k] = ofile3d.def_var(dmpvname[k],"sfloat",["x","y","time"])
    else
-      v3d_nc[k] = ofile3d.def_var(dmpvname[k],"sfloat",["x","y","z","time"])
+      if dmpnz[k] == nz then
+         v3d_nc[k] = ofile3d.def_var(dmpvname[k],"sfloat",["x","y","z","time"])
+      elsif dmpnz[k] == nz_und then
+         v3d_nc[k] = ofile3d.def_var(dmpvname[k],"sfloat",["x","y","zund","time"])
+      end
    end
    v3d_nc[k].put_att("long_name",dmplname[k])
    v3d_nc[k].put_att("units",dmpuname[k])
@@ -293,6 +307,7 @@ ofile3d.enddef
 x_nc.put( x.val )
 y_nc.put( y.val )
 z_nc.put( z.val )
+zund_nc.put( zund.val )
 
 for k in 0..vnumgeo-1
    vgeo_nc[k].put(gpfingeo[k].val)

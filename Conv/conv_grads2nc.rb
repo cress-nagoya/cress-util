@@ -31,7 +31,7 @@ dmpmon = fconf_nospace.split("\ndmpmon=")[1].split("\n")[0].split("!")[0].to_i
 nx = fconf_nospace.split("\nxdim=")[1].split("\n")[0].split("!")[0].to_i - 3
 ny = fconf_nospace.split("\nydim=")[1].split("\n")[0].split("!")[0].to_i - 3
 nz = fconf_nospace.split("\nzdim=")[1].split("\n")[0].split("!")[0].to_i - 3
-nz_und = fconf_nospace.split("\nlevund=")[1].split("\n")[0].split("!")[0].to_i
+nz_und = fconf_nospace.split("\nlevund=")[1].split("\n")[0].split("!")[0].to_i  # Bug fix reported by Manjate-san
 ts = fconf_nospace.split("\nstime=")[1].split("\n")[0].split("!")[0].to_i
 te = fconf_nospace.split("\netime=")[1].split("\n")[0].split("!")[0].to_i
 start_time = fconf_nospace.split("\nsfcast=")[1].split("\n")[0].split("!")[0].gsub("'","")

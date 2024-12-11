@@ -7,7 +7,7 @@ To run programs in subdirectories, you need to edit `Mkinclude`, depending on yo
   FC      = gfortran
   FFLAGS  = -fconvert=big-endian
 
-  # Options used drawing by DCL-fortran
+  # Options used in drawing by DCL-fortran
   DCLFC   = dclfrt
   AF90LIB = dclaf90
   AF90LD  = /usr/local
@@ -39,3 +39,4 @@ To run programs in subdirectories, you need to edit `Mkinclude`, depending on yo
        ```
   * Note
     * If you have an error `Segmentation fault`, you need to increase your memory stack: `$ ulimit -s unlimited`
+    * *Caution for GTOPO30*: Current program is *NOT* support the conversion of data covered beyond 60 degreeN/degreeS .

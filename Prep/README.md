@@ -39,4 +39,4 @@ To run programs in subdirectories, you need to edit `Mkinclude`, depending on yo
        ```
   * Note
     * If you have an error `Segmentation fault`, you need to increase your memory stack: `$ ulimit -s unlimited`
-    * **Caution for GTOPO30**: Current program is **NOT** support the conversion of data covered beyond 60 degreeN/degreeS .
+    * **Caution for GTOPO30**: `TOPO30` is **NOT** supporting the conversion of data covered beyond 60 degreeN/degreeS .

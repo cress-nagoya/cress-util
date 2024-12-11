@@ -15,6 +15,7 @@ program SRTM3
   integer, parameter :: ny=6000  ! 元の標高データの分割ファイルの lat 成分数
   integer, parameter :: ntx=4800  ! 重複を避けたときのデータ数
   integer, parameter :: nty=6000  ! 重複を避けたときのデータ数
+  integer(2) :: undef  ! ocean mask value
   integer :: lonmin  ! 作成するデータの西端 [deg]
   integer :: latmin  ! 作成するデータの北端 [deg] (SRTM が北西からのため)
   integer :: fnumber_lon  ! lon 方向に読み出す分割ファイル数
@@ -34,7 +35,7 @@ program SRTM3
   integer :: i, j, k, l, m, n
   integer(8) :: byte
 
-  namelist /set /lonmin,latmin,fnumber_lon,fnumber_lat,foot_name,trn_name
+  namelist /set /lonmin,latmin,fnumber_lon,fnumber_lat,foot_name,trn_name, undef
   read(5,set)
 
 !-- 既定値の設定
@@ -102,12 +103,13 @@ subroutine fname_make( lonp, latp, foot_name, make_file )
 
 end subroutine
 
-subroutine read_height_file( fname, nx, ny, byte, height )
+subroutine read_height_file( fname, nx, ny, byte, undefv, height )
   implicit none
   character(*), intent(in) :: fname  ! 読み込むファイル名
   integer, intent(in) :: nx  ! ファイルの経度格子数
   integer, intent(in) :: ny  ! ファイルの緯度格子数
   integer, intent(in) :: byte  ! 1 レコードのバイト数
+  integer(2), intent(in) :: undefv  ! ocean mask value
   real, intent(inout) :: height(nx,ny)
   integer :: i, j, k, siz, stat
   integer(2) :: tmp(nx,ny)
@@ -124,7 +126,10 @@ subroutine read_height_file( fname, nx, ny, byte, height )
 !-- 北西からのデータを南西開始に変換
         do j=1,ny
            do i=1,nx
-              height(i,j)=real(tmp(i,ny-j+1))
+              if(tmp(i,ny-j+1)==undefv)then
+                 height(i,j)=0.0
+              else
+                 height(i,j)=real(tmp(i,ny-j+1))
            end do
         end do
      end if
@@ -164,7 +169,7 @@ subroutine output_ctl( nax, nay, lonmin, latmin, trn_name )
   write(*,'(a52)') "xdef"//formb//' LINEAR '//formd//' '//formf
   write(*,'(a52)') "ydef"//formc//' LINEAR '//forme//' '//formf
   write(*,'(a20)') "zdef      1 LEVELS 1"
-  write(*,'(a36)') "tdef      1 LINEAR 00Z01JAN0000 00hr"
+  write(*,'(a36)') "tdef      1 LINEAR 00Z01JAN0000 01hr"
   write(*,'(a9)') "vars    1"
   write(*,'(a28)') "ht   0 99 terrain height (m)"
   write(*,'(a7)') "endvars"

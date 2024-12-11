@@ -1,5 +1,6 @@
-program SRTM3
-! NASA の SRTM 3 データから任意の矩形の標高データを作成するプログラム.
+program TOPO30
+! Author: Satoki Tsujino (satoki_at_gfd-dennou.org)
+! NASA の SRTM30 or USGS の GTOPO30 データから任意の矩形の地形データを作成するプログラム.
 ! ここでは, 読み込んだデータファイルでの格子間隔と作成するファイルの格子間隔は
 ! 同一という前提で作成している. 補完でさらに格子解像度を変えるようなことは
 ! 一切しない.

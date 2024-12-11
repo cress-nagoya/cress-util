@@ -8,5 +8,5 @@ Scripts and programs to prepare preprocess files in CReSS.
     ```
     conf = "srtm30.nml" or "gtopo30.nml"  # CReSS configuration file
     ```
-    3. Run the script: `$ ./Topo.exe < \[conf\]`
+    3. Run the script: `$ ./Topo.exe < [conf]`
 

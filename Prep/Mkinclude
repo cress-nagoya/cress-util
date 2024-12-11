@@ -1,0 +1,29 @@
+# Mkinclude
+# Intel Fortran Compiler (Ver.ifort)
+FC	= ifort
+FFLAGS	= -assume byterecl -convert big_endian -openmp
+
+# Fujitsu Fortran Compiler (Ver.frt)
+#FC	= frt
+#FFLAGS	= 
+
+# G-Fortran (Ver.gfortran)
+#FC	= gfortran
+#FFLAGS	= -fconvert=big-endian
+
+#BIN	= /home/satoki/usr/bin
+# Options for drawing (with DCL-fortran)
+DCLFC	= dclf90
+AF90LIB	= dclaf90
+AF90LD	= /home/satoki/usr/local
+STPKLIB	= stpk
+STPKLD	= /home/satoki/usr/local
+
+#LDFLAGS = /opt/intel/Compiler/11.1/069/lib/intel64
+#LFLAGS	= iomp5
+
+#GTHOME	= /home/satoki/usr/gtool5
+#GTLIB	= gtool5
+#GTFC	= gt5frt
+#NCHOME	= /home/satoki/usr/netcdf-4.0
+#NCLIB	= netcdf

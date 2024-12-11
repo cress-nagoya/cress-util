@@ -1,0 +1,17 @@
+&set
+lonmin = 135        ! 読み込み開始の経度(西端)
+latmin = 33         ! 読み込み開始の緯度(南端)
+fnumber_lon = 4     ! 経度方向のファイル数
+fnumber_lat = 4     ! 緯度方向のファイル数
+foot_name = ".hgt"  ! 読み込むファイルの拡張子
+trn_name = "data.terrain.bin_SRTM3"  ! 作成するデータファイルの名前
+/
+
+&domain
+nnx = 1, 1001       ! グラフ化するときの領域 (lonmin からの格子数 x 3 秒)
+nny = 1, 1001       ! グラフ化するときの領域 (latmin からの格子数 x 3 秒)
+shade_max = 1000.0  ! シェードの最大値
+IWS = 2             ! IWS = 1 [x], 2 [ps], 3 [Tek], 4 [png]
+gnum = 0.5          ! 経緯度線の間隔 [deg]
+title = 'test domain'   ! グラフのタイトル
+/

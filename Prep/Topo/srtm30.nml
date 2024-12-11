@@ -1,0 +1,19 @@
+&set
+lonmin = 100.0      ! 読み込み開始の経度 (西端)
+latmin = 90.0       ! 読み込み開始の緯度 (北端)
+fnumber_lon = 2     ! 経度方向のファイル数
+fnumber_lat = 2     ! 緯度方向のファイル数
+foot_name = ".DEM"  ! 読み込むファイルの拡張子
+trn_name = "data.terrain.bin_SRTM30"  ! 作成するデータファイルの名前
+/
+
+&domain
+!nnx = 2401, 7200        ! グラフ化するときの領域 (lonmin からの格子数 x 3 秒)
+nnx = 9001, 12000        ! グラフ化するときの領域 (lonmin からの格子数 x 3 秒)
+nny = 5001, 8200        ! グラフ化するときの領域 (latmin からの格子数 x 3 秒)
+!nny = 4501, 7500        ! グラフ化するときの領域 (latmin からの格子数 x 3 秒)
+shade_max = 1000.0  ! シェードの最大値
+IWS = 1             ! IWS = 1 [x], 2 [ps], 3 [Tek], 4 [png]
+gnum = 0.5          ! 経緯度線の間隔 [deg]
+title = 'test domain'   ! グラフのタイトル
+/

@@ -1,5 +1,5 @@
 &set
-lonmin = -20.0       ! West edge longitude
+lonmin = -20.0      ! West edge longitude
 latmin = -10.0      ! North edge latitude
 fnumber_lon = 2     ! File number of the original DEM in logitude
 fnumber_lat = 1     ! File number of the original DEM in latitude

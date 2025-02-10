@@ -1,46 +1,45 @@
-program TOPO30
-! Author: Satoki Tsujino (satoki_at_gfd-dennou.org)
-! NASA ¤Î SRTM30 or USGS ¤Î GTOPO30 ¥Ç¡¼¥¿¤«¤éÇ¤°Õ¤Î¶ë·Á¤ÎÃÏ·Á¥Ç¡¼¥¿¤òºîÀ®¤¹¤ë¥×¥í¥°¥é¥à.
-! ¤³¤³¤Ç¤Ï, ÆÉ¤ß¹ş¤ó¤À¥Ç¡¼¥¿¥Õ¥¡¥¤¥ë¤Ç¤Î³Ê»Ò´Ö³Ö¤ÈºîÀ®¤¹¤ë¥Õ¥¡¥¤¥ë¤Î³Ê»Ò´Ö³Ö¤Ï
-! Æ±°ì¤È¤¤¤¦Á°Äó¤ÇºîÀ®¤·¤Æ¤¤¤ë. Êä´°¤Ç¤µ¤é¤Ë³Ê»Ò²òÁüÅÙ¤òÊÑ¤¨¤ë¤è¤¦¤Ê¤³¤È¤Ï
-! °ìÀÚ¤·¤Ê¤¤.
-! SRTM 3 ÀìÍÑ¤ÎÀßÄê¤¬¤¤¤¯¤Ä¤«ÀßÄê¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç, Â¾¤ËÅ¾ÍÑ¤¹¤ë¤Ê¤é, 
-! ¤½¤ÎÃÍ¤òÊÑ¤¨¤ë¤³¤È.
-! ÆÉ¤ß¹ş¤àÎÎ°è¤Ë¤è¤Ã¤Æ¤ÏÈó¾ï¤Ë¥á¥â¥ê¤ò¾ÃÈñ¤¹¤ë¤Î¤Ç,
-! Segmentation fault ¤ÇÍî¤Á¤ë¾ì¹ç, stack ¤Î¾å¸ÂÃÍ¤ò³°¤¹¤³¤È.
-! $ ulimit -s unlimited (Linux ¤Î¾ì¹ç)
+program SRTM3
+! NASA ã® SRTM 3 ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ä»»æ„ã®çŸ©å½¢ã®æ¨™é«˜ãƒ‡ãƒ¼ã‚¿ã‚’ä½œæˆã™ã‚‹ãƒ—ãƒ­ã‚°ãƒ©ãƒ .
+! ã“ã“ã§ã¯, èª­ã¿è¾¼ã‚“ã ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã§ã®æ ¼å­é–“éš”ã¨ä½œæˆã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã®æ ¼å­é–“éš”ã¯
+! åŒä¸€ã¨ã„ã†å‰æã§ä½œæˆã—ã¦ã„ã‚‹. è£œå®Œã§ã•ã‚‰ã«æ ¼å­è§£åƒåº¦ã‚’å¤‰ãˆã‚‹ã‚ˆã†ãªã“ã¨ã¯
+! ä¸€åˆ‡ã—ãªã„.
+! SRTM 3 å°‚ç”¨ã®è¨­å®šãŒã„ãã¤ã‹è¨­å®šã•ã‚Œã¦ã„ã‚‹ã®ã§, ä»–ã«è»¢ç”¨ã™ã‚‹ãªã‚‰, 
+! ãã®å€¤ã‚’å¤‰ãˆã‚‹ã“ã¨.
+! èª­ã¿è¾¼ã‚€é ˜åŸŸã«ã‚ˆã£ã¦ã¯éå¸¸ã«ãƒ¡ãƒ¢ãƒªã‚’æ¶ˆè²»ã™ã‚‹ã®ã§,
+! Segmentation fault ã§è½ã¡ã‚‹å ´åˆ, stack ã®ä¸Šé™å€¤ã‚’å¤–ã™ã“ã¨.
+! $ ulimit -s unlimited (Linux ã®å ´åˆ)
 
   implicit none
 
-  integer, parameter :: nx=4800  ! ¸µ¤ÎÉ¸¹â¥Ç¡¼¥¿¤ÎÊ¬³ä¥Õ¥¡¥¤¥ë¤Î lon À®Ê¬¿ô
-  integer, parameter :: ny=6000  ! ¸µ¤ÎÉ¸¹â¥Ç¡¼¥¿¤ÎÊ¬³ä¥Õ¥¡¥¤¥ë¤Î lat À®Ê¬¿ô
-  integer, parameter :: ntx=4800  ! ½ÅÊ£¤òÈò¤±¤¿¤È¤­¤Î¥Ç¡¼¥¿¿ô
-  integer, parameter :: nty=6000  ! ½ÅÊ£¤òÈò¤±¤¿¤È¤­¤Î¥Ç¡¼¥¿¿ô
+  integer, parameter :: nx=4800  ! å…ƒã®æ¨™é«˜ãƒ‡ãƒ¼ã‚¿ã®åˆ†å‰²ãƒ•ã‚¡ã‚¤ãƒ«ã® lon æˆåˆ†æ•°
+  integer, parameter :: ny=6000  ! å…ƒã®æ¨™é«˜ãƒ‡ãƒ¼ã‚¿ã®åˆ†å‰²ãƒ•ã‚¡ã‚¤ãƒ«ã® lat æˆåˆ†æ•°
+  integer, parameter :: ntx=4800  ! é‡è¤‡ã‚’é¿ã‘ãŸã¨ãã®ãƒ‡ãƒ¼ã‚¿æ•°
+  integer, parameter :: nty=6000  ! é‡è¤‡ã‚’é¿ã‘ãŸã¨ãã®ãƒ‡ãƒ¼ã‚¿æ•°
   integer(2) :: undef  ! ocean mask value
-  integer :: lonmin  ! ºîÀ®¤¹¤ë¥Ç¡¼¥¿¤ÎÀ¾Ã¼ [deg]
-  integer :: latmin  ! ºîÀ®¤¹¤ë¥Ç¡¼¥¿¤ÎËÌÃ¼ [deg] (SRTM ¤¬ËÌÀ¾¤«¤é¤Î¤¿¤á)
-  integer :: fnumber_lon  ! lon Êı¸ş¤ËÆÉ¤ß½Ğ¤¹Ê¬³ä¥Õ¥¡¥¤¥ë¿ô
-  integer :: fnumber_lat  ! lat Êı¸ş¤ËÆÉ¤ß½Ğ¤¹Ê¬³ä¥Õ¥¡¥¤¥ë¿ô
-  integer :: nax  ! ºîÀ®¥Ç¡¼¥¿¤Î x Êı¸ş¤ÎÁíÇÛÎó¿ô
-  integer :: nay  ! ºîÀ®¥Ç¡¼¥¿¤Î y Êı¸ş¤ÎÁíÇÛÎó¿ô
+  integer :: lonmin  ! ä½œæˆã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®è¥¿ç«¯ [deg]
+  integer :: latmin  ! ä½œæˆã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®åŒ—ç«¯ [deg] (SRTM ãŒåŒ—è¥¿ã‹ã‚‰ã®ãŸã‚)
+  integer :: fnumber_lon  ! lon æ–¹å‘ã«èª­ã¿å‡ºã™åˆ†å‰²ãƒ•ã‚¡ã‚¤ãƒ«æ•°
+  integer :: fnumber_lat  ! lat æ–¹å‘ã«èª­ã¿å‡ºã™åˆ†å‰²ãƒ•ã‚¡ã‚¤ãƒ«æ•°
+  integer :: nax  ! ä½œæˆãƒ‡ãƒ¼ã‚¿ã® x æ–¹å‘ã®ç·é…åˆ—æ•°
+  integer :: nay  ! ä½œæˆãƒ‡ãƒ¼ã‚¿ã® y æ–¹å‘ã®ç·é…åˆ—æ•°
   integer :: fnumber_all
-  character(80) :: trn_name  ! ºîÀ®¤¹¤ë¥Õ¥¡¥¤¥ëÌ¾
-  character(80) :: fullname  ! ÆÉ¤ß¹ş¤à¥Õ¥¡¥¤¥ëÌ¾
+  character(80) :: trn_name  ! ä½œæˆã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å
+  character(80) :: fullname  ! èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«å
   character(1) :: nsflag, weflag
-  character(4) :: foot_name  ! ¥Õ¥¡¥¤¥ë¤Î³ÈÄ¥»Ò
+  character(4) :: foot_name  ! ãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­
   character(2) :: fname_lat
   character(3) :: fname_lon
-  real, allocatable, dimension(:,:) :: height  ! É¸¹â¥Ç¡¼¥¿ÍÑÇÛÎó
-  real, allocatable, dimension(:) :: lon  ! ºîÀ®¥Õ¥¡¥¤¥ë¤Î lon ¾ğÊó
-  real, allocatable, dimension(:) :: lat  ! ºîÀ®¥Õ¥¡¥¤¥ë¤Î lat ¾ğÊó
+  real, allocatable, dimension(:,:) :: height  ! æ¨™é«˜ãƒ‡ãƒ¼ã‚¿ç”¨é…åˆ—
+  real, allocatable, dimension(:) :: lon  ! ä½œæˆãƒ•ã‚¡ã‚¤ãƒ«ã® lon æƒ…å ±
+  real, allocatable, dimension(:) :: lat  ! ä½œæˆãƒ•ã‚¡ã‚¤ãƒ«ã® lat æƒ…å ±
   integer :: i, j, k, l, m, n
   integer(8) :: byte
 
   namelist /set /lonmin,latmin,fnumber_lon,fnumber_lat,foot_name,trn_name, undef
-  read(5,set)
+  read(5,nml=set)
 
-!-- ´ûÄêÃÍ¤ÎÀßÄê
-  fnumber_all=fnumber_lon*fnumber_lat  ! ÆÉ¤ß½Ğ¤¹Ê¬³ä¥Õ¥¡¥¤¥ëÁí¿ô
+!-- æ—¢å®šå€¤ã®è¨­å®š
+  fnumber_all=fnumber_lon*fnumber_lat  ! èª­ã¿å‡ºã™åˆ†å‰²ãƒ•ã‚¡ã‚¤ãƒ«ç·æ•°
   nax=ntx*fnumber_lon
   nay=nty*fnumber_lat
   byte=4*nax*nay
@@ -57,7 +56,7 @@ program TOPO30
   do j=1,fnumber_lat
      do i=1,fnumber_lon
         call fname_make( (lonmin+40*(i-1)), (latmin-50*(j-1)), foot_name, fullname )
-        call read_height_file( trim(fullname), nx, ny, 2,  &
+        call read_height_file( trim(fullname), nx, ny, 2, undef,  &
   &          height(((i-1)*ntx+1):(i*ntx),  &
   &          ((fnumber_lat-j)*nty+1):((fnumber_lat-j+1)*nty)) )
      end do
@@ -75,10 +74,10 @@ end program
 
 subroutine fname_make( lonp, latp, foot_name, make_file )
   implicit none
-  integer, intent(in) :: lonp  ! ¥Õ¥¡¥¤¥ëÌ¾¤Î·ĞÅÙ
-  integer, intent(in) :: latp  ! ¥Õ¥¡¥¤¥ëÌ¾¤Î°ŞÅÙ
-  character(*), intent(in) :: foot_name  ! ¥Õ¥¡¥¤¥ë¤Î³ÈÄ¥»Ò
-  character(*), intent(inout) :: make_file  ! ºîÀ®¤µ¤ì¤ë¥Õ¥¡¥¤¥ëÌ¾
+  integer, intent(in) :: lonp  ! ãƒ•ã‚¡ã‚¤ãƒ«åã®çµŒåº¦
+  integer, intent(in) :: latp  ! ãƒ•ã‚¡ã‚¤ãƒ«åã®ç·¯åº¦
+  character(*), intent(in) :: foot_name  ! ãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­
+  character(*), intent(inout) :: make_file  ! ä½œæˆã•ã‚Œã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å
   character(1) :: nsflag, weflag
   character(3) :: lon_name
   character(2) :: lat_name
@@ -106,10 +105,10 @@ end subroutine
 
 subroutine read_height_file( fname, nx, ny, byte, undefv, height )
   implicit none
-  character(*), intent(in) :: fname  ! ÆÉ¤ß¹ş¤à¥Õ¥¡¥¤¥ëÌ¾
-  integer, intent(in) :: nx  ! ¥Õ¥¡¥¤¥ë¤Î·ĞÅÙ³Ê»Ò¿ô
-  integer, intent(in) :: ny  ! ¥Õ¥¡¥¤¥ë¤Î°ŞÅÙ³Ê»Ò¿ô
-  integer, intent(in) :: byte  ! 1 ¥ì¥³¡¼¥É¤Î¥Ğ¥¤¥È¿ô
+  character(*), intent(in) :: fname  ! èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«å
+  integer, intent(in) :: nx  ! ãƒ•ã‚¡ã‚¤ãƒ«ã®çµŒåº¦æ ¼å­æ•°
+  integer, intent(in) :: ny  ! ãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¯åº¦æ ¼å­æ•°
+  integer, intent(in) :: byte  ! 1 ãƒ¬ã‚³ãƒ¼ãƒ‰ã®ãƒã‚¤ãƒˆæ•°
   integer(2), intent(in) :: undefv  ! ocean mask value
   real, intent(inout) :: height(nx,ny)
   integer :: i, j, k, siz, stat
@@ -124,13 +123,14 @@ subroutine read_height_file( fname, nx, ny, byte, undefv, height )
      else
         write(*,*) "Now reading file is ", trim(fname), "."
         read(11,rec=1) ((tmp(i,j),i=1,nx),j=1,ny)
-!-- ËÌÀ¾¤«¤é¤Î¥Ç¡¼¥¿¤òÆîÀ¾³«»Ï¤ËÊÑ´¹
+!-- åŒ—è¥¿ã‹ã‚‰ã®ãƒ‡ãƒ¼ã‚¿ã‚’å—è¥¿é–‹å§‹ã«å¤‰æ›
         do j=1,ny
            do i=1,nx
               if(tmp(i,ny-j+1)==undefv)then
                  height(i,j)=0.0
               else
                  height(i,j)=real(tmp(i,ny-j+1))
+              end if
            end do
         end do
      end if

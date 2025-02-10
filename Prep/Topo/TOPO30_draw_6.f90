@@ -1,6 +1,4 @@
-program TOPO30_draw
-! Author: Satoki Tsujino (satoki_at_gfd-dennou.org)
-! Drawing program for topography data converted by TOPO30
+program SRTM3_draw
 
   use dcl
   use Dcl_Automatic

@@ -1,5 +1,6 @@
-program SRTM3
-! NASA の SRTM 3 データから任意の矩形の標高データを作成するプログラム.
+program TOPO30
+! Author: Satoki Tsujino (satoki_at_gfd-dennou.org)
+! NASA の SRTM30 or USGS の GTOPO30 データから任意の矩形の地形データを作成するプログラム.
 ! ここでは, 読み込んだデータファイルでの格子間隔と作成するファイルの格子間隔は
 ! 同一という前提で作成している. 補完でさらに格子解像度を変えるようなことは
 ! 一切しない.
@@ -15,9 +16,9 @@ program SRTM3
   integer, parameter :: ny=6000  ! 元の標高データの分割ファイルの lat 成分数
   integer, parameter :: ntx=4800  ! 重複を避けたときのデータ数
   integer, parameter :: nty=6000  ! 重複を避けたときのデータ数
-  integer(2) :: undef  ! ocean mask value
   integer :: lonmin  ! 作成するデータの西端 [deg]
   integer :: latmin  ! 作成するデータの北端 [deg] (SRTM が北西からのため)
+  integer(2) :: undef  ! ocean mask value
   integer :: fnumber_lon  ! lon 方向に読み出す分割ファイル数
   integer :: fnumber_lat  ! lat 方向に読み出す分割ファイル数
   integer :: nax  ! 作成データの x 方向の総配列数
@@ -32,7 +33,7 @@ program SRTM3
   real, allocatable, dimension(:,:) :: height  ! 標高データ用配列
   real, allocatable, dimension(:) :: lon  ! 作成ファイルの lon 情報
   real, allocatable, dimension(:) :: lat  ! 作成ファイルの lat 情報
-  integer :: i, j, k, l, m, n
+  integer :: i, j, k, l, m, n, stat
   integer(8) :: byte
 
   namelist /set /lonmin,latmin,fnumber_lon,fnumber_lat,foot_name,trn_name, undef

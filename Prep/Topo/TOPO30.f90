@@ -98,10 +98,10 @@ subroutine fname_make( lonp, latp, foot_name, make_file )
      nsflag='N'
   end if
 
-  make_file=weflag//lon_name//nsflag//lat_name//foot_name
+  make_file=weflag//lon_name//nsflag//lat_name//trim(adjustl(foot_name))
 
   write(*,*) "reading file name is ",  &
-  &          weflag//lon_name//nsflag//lat_name//foot_name
+  &          weflag//lon_name//nsflag//lat_name//trim(adjustl(foot_name))
 
 end subroutine
 

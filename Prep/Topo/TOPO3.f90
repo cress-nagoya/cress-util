@@ -77,7 +77,7 @@ subroutine fname_make( lonp, latp, foot_name, make_file )
   integer, intent(in) :: lonp  ! ファイル名の経度
   integer, intent(in) :: latp  ! ファイル名の緯度
   character(*), intent(in) :: foot_name  ! ファイルの拡張子
-  character(*), intent(inout) :: make_file  ! 作成されるファイル名
+  character(*), intent(out) :: make_file  ! 作成されるファイル名
   character(1) :: nsflag, weflag
   character(3) :: lon_name
   character(2) :: lat_name
@@ -97,9 +97,10 @@ subroutine fname_make( lonp, latp, foot_name, make_file )
      nsflag='N'
   end if
 
-  make_file=nsflag//lat_name//weflag//lon_name//foot_name
+  make_file=nsflag//lat_name//weflag//lon_name//trim(adjustl(foot_name))
 
-  write(*,*) "reading file name is ", trim(make_file)
+  write(*,*) "reading file name is ",  &
+  &          nsflag//lat_name//weflag//lon_name//trim(adjustl(foot_name))
 
 end subroutine
 
@@ -109,7 +110,7 @@ subroutine read_height_file( fname, nx, ny, byte, height )
   integer, intent(in) :: nx  ! ファイルの経度格子数
   integer, intent(in) :: ny  ! ファイルの緯度格子数
   integer, intent(in) :: byte  ! 1 レコードのバイト数
-  real, intent(inout) :: height(nx,ny)
+  real, intent(out) :: height(nx,ny)
   integer :: i, j, k, siz, stat
   integer(2) :: tmp(nx,ny)
 
